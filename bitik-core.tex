@@ -1,0 +1,94 @@
+% ============================================================
+% BITIK CORE TEMPLATE
+% Parameterized book layout engine — expects the following macros
+% to be \def'd BEFORE \input{bitik-core.tex}:
+%
+%   \trimwidth, \trimheight   — page trim size (mm)
+%   \margintop, \marginbottom — vertical margins (mm)
+%   \margininside, \marginoutside — horizontal margins (mm)
+%   \basefontsize             — main text size (pt)
+%   \baselinestretchval       — line spacing multiplier
+%   \booktitle, \bookauthor   — metadata
+%   \booktextfile (optional)  — path to the manuscript file, relative to
+%                               sizes/ (defaults to ../sample-text.tex)
+% ============================================================
+\providecommand{\booktextfile}{../sample-text.tex}
+
+\documentclass[\basefontsize pt, oneside]{memoir}
+
+\usepackage{geometry}
+\geometry{
+  paperwidth=\trimwidth mm,
+  paperheight=\trimheight mm,
+  top=\margintop mm,
+  bottom=\marginbottom mm,
+  inner=\margininside mm,
+  outer=\marginoutside mm
+}
+
+\usepackage{fontspec}
+% Fonts are loaded directly from the fonts/ folder next to this project —
+% no system font installation (fc-cache, ~/.fonts) is needed. Verified
+% working with XeTeX's local Path= loading (2026-09).
+\setmainfont{PTSerif-Regular.ttf}[
+  Path = ../fonts/,
+  BoldFont = PTSerif-Bold.ttf,
+  ItalicFont = PTSerif-Italic.ttf,
+  BoldItalicFont = PTSerif-BoldItalic.ttf
+]
+
+% --- Kazakh hyphenation ---
+% As of the Feb 2026 hyph-utf8 release, real Kazakh hyphenation patterns
+% exist (hyph-kk.tex), but neither Babel nor Polyglossia has a Kazakh
+% language module yet, so the *language* can't be selected by name via
+% \usepackage[kazakh]{babel} or \setdefaultlanguage{kazakh}. The patterns
+% were registered directly with this TeX installation's language.dat and
+% the format was rebuilt (see README "Hyphenation setup" section), which
+% makes the low-level \l@kazakh language slot available. We select it
+% by hand instead of through a language package:
+\makeatletter
+\language=\l@kazakh
+\makeatother
+
+\linespread{\baselinestretchval}
+
+% --- Chapter style: clean, generous whitespace, new page ---
+\chapterstyle{bianchi}
+\renewcommand{\printchaptername}{}
+\renewcommand{\chapnumfont}{\normalfont\Large}
+\renewcommand{\chaptitlefont}{\normalfont\huge\bfseries}
+
+% --- Headers / footers: minimal, page number only ---
+\makepagestyle{bitikpage}
+\makeevenfoot{bitikpage}{}{\thepage}{}
+\makeoddfoot{bitikpage}{}{\thepage}{}
+\makeevenhead{bitikpage}{}{}{}
+\makeoddhead{bitikpage}{}{}{}
+\pagestyle{bitikpage}
+
+% --- Paragraph style: classic book indent, no extra skip ---
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{0pt}
+
+\title{\booktitle}
+\author{\bookauthor}
+\date{}
+
+\begin{document}
+
+\frontmatter
+\begin{titlingpage}
+  \centering
+  \vspace*{4cm}
+  {\huge\bfseries \booktitle \par}
+  \vspace{1cm}
+  {\Large \bookauthor \par}
+\end{titlingpage}
+
+\mainmatter
+
+\chapter{Бірінші тарау}
+
+\input{\booktextfile}
+
+\end{document}
