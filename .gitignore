@@ -1,0 +1,18 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# Compiled PDFs from sizes/ (samples/ PDFs are committed intentionally as demos)
+sizes/*.pdf
+
+# Archives / backups of the project — Git already keeps history, don't zip it in
+*.zip
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
